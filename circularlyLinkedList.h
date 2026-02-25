@@ -63,6 +63,29 @@ template<typename T> class circularlyLinkedList {
         length++;
         return true;
     }
+
+    bool remove(T data) {
+        if (head->getData() == data) {
+            Node<T> *last = head;
+            while (last->next != head) {
+                last = last->next;
+            }
+            last->setNext(head->getNext());
+            delete head;
+            head = last->getNext();
+            length--;
+            return true;
+        }
+        Node<T> *current = head;
+        while (current->getNext()->getData() != data) {
+            current = current->getNext();
+        }
+        Node<T> *temp = current->getNext();
+        current->setNext(temp->getNext());
+        delete temp;
+        length--;
+        return true;
+    }
 };
 
 
