@@ -4,5 +4,5 @@ project(CP_1)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(CP_1 main.cpp
-        circularlyLinkedList.cpp
-        circularlyLinkedList.h)
+        CircularlyLinkedList.cpp
+        CircularlyLinkedList.h)
