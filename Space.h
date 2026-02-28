@@ -24,15 +24,15 @@ class Space_Go : Space {
 class Space_Property : Space {
     std::string name;
     int cost;
-    Player owner;
+    Player &owner;
     public:
         Space_Property(std::string& name, const int cost) : name(name), cost(cost), owner(nullptr) {}
 
         void land(Player &p) {
             if (owner == nullptr) {
-                p.buy(this);
+                p->buy(this);
             }else if (owner != p) {
-                p.rent(cost);
+                owner->deposit(p->rent(cost));
             }
         }
 };
