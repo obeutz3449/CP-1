@@ -27,10 +27,13 @@ template<typename T> class Node {
 
 template<typename T> class CircularlyLinkedList {
     Node<T> *head;
+    Node<T> *tail;
+
     public:
         int length;
-        CircularlyLinkedList() : head(nullptr), length(0) {}
-        bool insert(const T data, const int index) {
+        CircularlyLinkedList() : head(nullptr), tail(nullptr), length(0) {}
+
+        bool insert(const T &data, const int index) {
             if (length >= 40) return false;
             if (length == 0) {
                 head = new Node<T>(data);
