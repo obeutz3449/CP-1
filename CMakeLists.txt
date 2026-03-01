@@ -5,4 +5,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(CP_1 main.cpp
         CircularlyLinkedList.h
-        Space.h)
+        Space.h
+        Player.h)
