@@ -8,6 +8,7 @@
 class Player {
     int money = 0;
     int timesPassedGo = 0;
+    int index = 0;
 
     public:
         Player();
@@ -15,6 +16,14 @@ class Player {
         void go() {
             timesPassedGo++;
             deposit(200);
+        }
+
+        void setIndex(const int i) {
+            index = i;
+        }
+
+        [[nodiscard]] int getIndex() const {
+            return index;
         }
 
         bool buy(const int cost) {
@@ -34,7 +43,7 @@ class Player {
                 money-=cost;
                 return cost;
             }
-            int difference = cost - money;
+            const int difference = cost - money;
             money = 0;
             return difference;
         }

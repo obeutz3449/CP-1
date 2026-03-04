@@ -11,13 +11,14 @@
 
 class Space {
     public:
-        void pass(Player *p) {}
-        void land(Player *p) {}
+        virtual ~Space() = default;
+        virtual void pass(Player *p) {}
+        virtual void land(Player *p) {}
 };
 
 class Space_Go : Space {
     public:
-        void pass(Player *p) {
+        void pass(Player *p) override {
             p->go();
         }
 };
@@ -27,24 +28,20 @@ class Space_Property : Space {
     int cost;
     Player *owner;
     public:
-        Space_Property(std::string& name, const int cost) : name(name), cost(cost), owner(nullptr) {}
+        Space_Property(std::string name, const int cost) : name(std::move(name)), cost(cost), owner(nullptr) {}
 
-        void land(Player *p) {
+        void land(Player *p) override {
             if (owner == nullptr) {
                 if(p->buy(cost)) {
                     owner = p;
                 }
-            }else if (owner != p) {
+            }else if (&owner != &p) {
                 owner->deposit(p->rent(cost));
             }
         }
 
         [[nodiscard]] int getCost() const {
             return cost;
-        }
-
-    ~Space_Property() {
-            delete owner;
         }
 };
 
