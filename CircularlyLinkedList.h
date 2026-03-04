@@ -17,7 +17,7 @@ template<typename T> class Node {
         Node<T> *getNext() {
             return next;
         }
-        T* getData() {
+        T getData() {
             return data;
         }
         void setData(const T d) {
@@ -95,8 +95,8 @@ template<typename T> class CircularlyLinkedList {
             return true;
         }
 
-        T* get(const int index) {
-            Node<T> *current = head;
+        T get(const int index) {
+            auto current = head;
             for (int i = 0; i < index % length; i++) {
                 current = current->getNext();
             }
