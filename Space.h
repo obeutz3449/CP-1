@@ -16,14 +16,14 @@ class Space {
         virtual void land(Player *p) {}
 };
 
-class Space_Go : Space {
+class Space_Go : public Space {
     public:
         void pass(Player *p) override {
             p->go();
         }
 };
 
-class Space_Property : Space {
+class Space_Property : public Space {
     std::string name;
     int cost;
     Player *owner;
