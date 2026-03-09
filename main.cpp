@@ -29,9 +29,6 @@ int main() {
         list.insertMultiple(&s, list.length);
         list.insert(new Space(), list.length);
     }
-
-    cout << list.remove(list.get(6));
-    cout << list.removeByName("Space");
     cout << endl;
 
     list.printList();
