@@ -10,7 +10,12 @@
 
 
 class Space {
+    protected:
+        std::string name;
+        std::string color;
     public:
+        Space() : name("Space"), color("white") {}
+        Space(const std::string &name) : name(name) {}
         virtual ~Space() = default;
         virtual void pass(Player *p) {}
         virtual void land(Player *p) {}
@@ -18,21 +23,44 @@ class Space {
         static int f() {
             return 4;
         }
+
+        std::string getName() {
+            return name;
+        }
+
+        std::string getColor() {
+            return color;
+        }
+
+        virtual std::string toString() {
+            return name;
+        }
 };
 
 class Space_Go : public Space {
     public:
+        Space_Go() {
+            name = "Go";
+            color = "green";
+        }
         void pass(Player *p) override {
             p->go();
         }
 };
 
 class Space_Property : public Space {
-    std::string name;
     int cost;
     Player *owner;
     public:
-        Space_Property(std::string name, const int cost) : name(std::move(name)), cost(cost), owner(nullptr) {}
+        Space_Property(std::string nm, const int cost) : cost(cost), owner(nullptr) {
+            name = nm;
+            color = "blue";
+        }
+
+        Space_Property(std::string nm, const int cost, std::string c) : cost(cost), owner(nullptr) {
+            name = nm;
+            color = c;
+        }
 
         void land(Player *p) override {
             if (owner == nullptr) {
@@ -46,6 +74,10 @@ class Space_Property : public Space {
 
         [[nodiscard]] int getCost() const {
             return cost;
+        }
+
+        std::string toString() override {
+            return name + " ($" + std::to_string(cost) + ")";
         }
 };
 

@@ -31,11 +31,12 @@ template<typename T> class CircularlyLinkedList {
     Node<T> *tail;
 
     public:
+        const int CAPACITY = 40;
         int length;
         CircularlyLinkedList() : head(nullptr), tail(nullptr), length(0) {}
 
         bool insert(T data, const int index) {
-            if (length >= 40) return false;
+            if (length >= CAPACITY) return false;
             if (length == 0) {
                 head = new Node<T>(data);
                 head->setNext(head);
@@ -43,7 +44,7 @@ template<typename T> class CircularlyLinkedList {
                 length = 1;
                 return true;
             }
-            if (index%length == 0) {
+            if (index%(length+1) == 0) {
                 Node<T> *temp = head;
                 head = new Node<T>(data);
                 head->setNext(temp);
@@ -65,7 +66,7 @@ template<typename T> class CircularlyLinkedList {
             return true;
         }
 
-        bool remove(const T data) {
+    bool remove(const T data) {
             if (head == nullptr) return false;
             if (head->getData() == data) {
                 if (length == 1) {
@@ -100,31 +101,70 @@ template<typename T> class CircularlyLinkedList {
             return true;
         }
 
+    bool remove(Node<T>* node) {
+            if (head == nullptr) return false;
+            if (head == node) {
+                if (length == 1) {
+                    delete head;
+                    head = nullptr;
+                    length = 0;
+                    return true;
+                }
+                tail->setNext(head->getNext());
+                delete head;
+                head = tail->getNext();
+                length--;
+                return true;
+            }
+            if (tail == node) {
+                auto *temp = tail;
+                tail = getNode(length - 2);
+                tail->setNext(head);
+                delete temp;
+                length--;
+                return true;
+            }
+            Node<T> *current = head;
+            while (current->getNext() != node) {
+                current = current->getNext();
+                if (current == head) return false;
+            }
+            Node<T> *temp = current->getNext();
+            current->setNext(temp->getNext());
+            delete temp;
+            length--;
+            return true;
+        }
+
         bool insertMultiple(std::vector<T>* data, const int index) {
-            if (length + data->size() > 40) return false;
-            if (data->empty()) return true;
-            std::vector<Node<T>*> dataNode(data->size());
-            dataNode.push_back(new Node<T>(data->at(0)));
-            for (int i = 1; i < data->size() - 1; i++) {
-                auto* node = new Node<T>(data->at(i));
+            std::vector<Node<T>*> dataNode;
+            if (length + data->size() > CAPACITY){
+                dataNode = std::vector<Node<T>*>(data->size() + length - CAPACITY);
+            }else {
+                dataNode = std::vector<Node<T>*>(data->size());
+            }
+            if (data->empty()) return false;
+            dataNode[0] = new Node<T>(data->at(0));
+            for (int i = 1; i < dataNode.size(); i++) {
+                auto node = new Node<T>(data->at(i));
                 dataNode[i - 1]->setNext(node);
-                dataNode.push_back(node);
+                dataNode[i] = node;
             }
             Node<T> *dataHead = dataNode[0];
-            Node<T> *dataTail = dataNode[length - 1];
+            Node<T> *dataTail = dataNode[dataNode.size() - 1];
             if (length == 0) {
                 head = dataHead;
                 tail = dataTail;
                 tail->setNext(head);
-                length+=data->size();
+                length+=dataNode.size();
                 return true;
             }
             Node<T> *current = head;
-            if (index%length == 0) {
+            if (index%(length+1) == 0) {
                 head = dataHead;
                 dataTail->setNext(current);
                 tail->setNext(dataHead);
-                length+=data->size();
+                length+=dataNode.size();
                 return true;
             }
             for (int i = 0; i < (index - 1%length); i++) {
@@ -132,11 +172,34 @@ template<typename T> class CircularlyLinkedList {
             }
             dataTail->setNext(current->getNext());
             current->setNext(dataHead);
-            length+=data->size();
+            length+=dataNode.size();
             if (index%length == length-1) {
                 tail = dataTail;
             }
             return true;
+        }
+
+        bool removeByName(const std::string name) {
+            Node<T> *current = head;
+            for (int i = 0; i < length; i++) {
+                if (current->getData()->getName() == name) {
+                    return remove(current);
+                }
+                current = current->getNext();
+            }
+            return false;
+        }
+
+        std::vector<std::string> findByColor(std::string name) {
+            std::vector<std::string> result;
+            Node<T> *current = head;
+            for (int i = 0; i < length; i++) {
+                if (current->getData()->getColor() == name) {
+                    result.push_back(current->getData()->toString());
+                }
+                current = current->getNext();
+            }
+            return result;
         }
 
         T get(const int index) {
@@ -156,10 +219,20 @@ template<typename T> class CircularlyLinkedList {
         }
 
         void printList() {
-            std::cout << length << std::endl;
             Node<T> *current = head;
             for (int i = 0; i < length; i++) {
-                std::cout << current->getData() << " ";
+                std::cout << current->getData()->toString() <<  " ";
+                current = current->getNext();
+            }
+        }
+
+        void printListFrom(int start, int end) {
+            Node<T> *current = head;
+            for (int i = 0; i < start%length; i++) {
+                current = current->getNext();
+            }
+            for (int i = 0; i < (end - start)%length; i++) {
+                std::cout << current->getData()->toString() <<  " ";
                 current = current->getNext();
             }
         }

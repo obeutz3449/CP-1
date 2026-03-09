@@ -6,12 +6,12 @@
 #define CP_1_PLAYER_H
 
 class Player {
-    int money = 0;
-    int timesPassedGo = 0;
-    int index = 0;
+    int money;
+    int timesPassedGo;
+    int index;
 
     public:
-        Player();
+        Player() : money(0), timesPassedGo(0), index(0) {};
 
         void go() {
             timesPassedGo++;
@@ -24,6 +24,10 @@ class Player {
 
         [[nodiscard]] int getIndex() const {
             return index;
+        }
+
+        [[nodiscard]] int getTimesPassedGo() const {
+            return timesPassedGo;
         }
 
         bool buy(const int cost) {
