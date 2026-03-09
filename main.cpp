@@ -7,9 +7,11 @@
 using namespace std;
 
 int main() {
-    CircularlyLinkedList<Space*> list;
-    auto space = new Space_Go();
-    list.insert(space, 0);
+    CircularlyLinkedList<Space*> list = CircularlyLinkedList<Space*>();
+    auto go = new Space_Go();
+    list.insert(go, 0);
+    auto fifty = new vector<Space*>(50, new Space());
+    cout << list.insertMultiple(fifty, 1);
     return 0;
 }
 

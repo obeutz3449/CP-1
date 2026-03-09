@@ -14,6 +14,10 @@ class Space {
         virtual ~Space() = default;
         virtual void pass(Player *p) {}
         virtual void land(Player *p) {}
+
+        static int f() {
+            return 4;
+        }
 };
 
 class Space_Go : public Space {

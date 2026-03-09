@@ -100,12 +100,13 @@ template<typename T> class CircularlyLinkedList {
             return true;
         }
 
-        bool insertMultiple(std::pmr::vector<T> data, const int index) {
-            if (length + data.size() > 40) return false;
-            std::pmr::vector<Node<T>*> dataNode(data.size());
-            dataNode.push_back(new Node(data[0]));
-            for (int i = 1; i < data.size - 1; i++) {
-                auto* node = new Node<T>(data[i]);
+        bool insertMultiple(std::vector<T>* data, const int index) {
+            if (length + data->size() > 40) return false;
+            if (data->empty()) return true;
+            std::vector<Node<T>*> dataNode(data->size());
+            dataNode.push_back(new Node<T>(data->at(0)));
+            for (int i = 1; i < data->size() - 1; i++) {
+                auto* node = new Node<T>(data->at(i));
                 dataNode[i - 1]->setNext(node);
                 dataNode.push_back(node);
             }
@@ -115,7 +116,7 @@ template<typename T> class CircularlyLinkedList {
                 head = dataHead;
                 tail = dataTail;
                 tail->setNext(head);
-                length+=data.size();
+                length+=data->size();
                 return true;
             }
             Node<T> *current = head;
@@ -123,7 +124,7 @@ template<typename T> class CircularlyLinkedList {
                 head = dataHead;
                 dataTail->setNext(current);
                 tail->setNext(dataHead);
-                length+=data.size();
+                length+=data->size();
                 return true;
             }
             for (int i = 0; i < (index - 1%length); i++) {
@@ -131,7 +132,7 @@ template<typename T> class CircularlyLinkedList {
             }
             dataTail->setNext(current->getNext());
             current->setNext(dataHead);
-            length+=data.size();
+            length+=data->size();
             if (index%length == length-1) {
                 tail = dataTail;
             }
