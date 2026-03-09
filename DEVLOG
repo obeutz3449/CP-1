@@ -1,0 +1,78 @@
+# Developer Log (DEVLOG.md)
+## Monopoly Board Simulator (Spring 2026)
+
+1) **Mutual Dependence**
+- Both Player and Space both relied on the other to function
+- A not-very-quick google search of the problem left me confused
+- Class ChatGPT did not help me understand
+- Replaced all references to Spaces in Player to function with numbers instead.
+
+2) **Circularly Linked List without Tail**
+- For most of the time, I operated on the Linked List using just a head pointer.
+- It sucked. Too often I needed to worry about when I want to access what comes before the head pointer.
+- I added the tail pointer.
+
+3) **Circularly Linked List Methods Edge Cases**
+- At first, I used an algorithm to determine where to act.
+- It had problems with edge cases such as acting on head and tail pointers or when the list was small.
+- Inserted if statements.
+---
+### Entry 1
+**Date:** 2026-03-01
+**Entry Type:** Bug Fix
+**Task worked on:** Creating Player class
+**Issue or decision:** Player and Space were mutually dependant
+**Error message / symptom (if applicable):** Unable to perform action, most likely because of errors in the source code.
+**What I tried:** I tried what the internet prescribed with some text I didn't understand how to use.
+**Fix / resolution (or final decision):** I settled on removing all references to Spaces in the Player class and getting it to work just with numbers.
+**Commit(s):**  "Added Player class, fixed Space to work without mutual dependency, clean up code"
+---
+### Entry 2
+**Date:** 2026-03-03
+**Entry Type:** Bug Fix
+**Task worked on:** Using different types of Spaces
+**Issue or decision:** Compiler was telling me I had a diamond problem
+**Error message / symptom (if applicable):** "Cannot convert Space_Go * to parameter type Space *: base class is ambiguous or inaccessible"
+**What I tried:** I had thought it was some problem of using * or & when I should be doing something else. I tried flipping them all around but it only added or removed the symbols from the error message.
+**Fix / resolution (or final decision):** Add "public" to the declaration of each of the sublasses.
+**Commit(s):** "Fixed "diamond problem""
+---
+### Entry 3
+**Date:** 2026-03-03
+**Entry Type:** Bug Fix
+**Task worked on:** Bug-testing my code with implementation in main.cpp
+**Issue or decision:**  I wanted to be able to pass specific references of Spaces into my CircularlyLinkedList but couldn't with my implementation.
+**Error message / symptom (if applicable):** N/A
+**What I tried:** I changed so many of the *s and &s in my code, hoping something would let me add data via references
+**Fix / resolution (or final decision):** Finally, I realized main.cpp was the best place for my fix and changed the template to say <Space*>
+**Commit(s):** "Added get functionality"
+---
+### Entry 4
+**Date:** 2026-03-03
+**Entry Type:** Bug Fix
+**Task worked on:** Fixing the Nodes
+**Issue or decision:** After the events of Entry 3, Nodes stopped holding data how I wanted them to.
+**Error message / symptom (if applicable):** "Clangd: In template: cannot initialize a member subobject of type 'Space **' with an lvalue of type 'Space *'"
+**What I tried:** I once again started messing around with * and & markers. I don't think I understand them fully.
+**Fix / resolution (or final decision):** Now that I was passing pointers into the LinkedList, it didn't make sense to store those pointers as pointers, so I removed the *s.
+**Commit(s):** "Fixed some * and & problem", "Fixed "diamond problem"", "Added get functionality"
+---
+### Entry 5
+**Date:** 2026-03-03
+**Entry Type:** Engineering Decision
+**Task worked on:** Moving Player
+**Issue or decision:** I couldn't figure out how to keep from a mutual dependence while allowing Player to move and Space to keep track of owners.
+**Error message / symptom (if applicable):** N/A
+**What I tried:** I tried passing the CircularlyLinkedList into the player but it was specific to Spaces so references and it were forbidden
+**Fix / resolution (or final decision):** I put the code into main.cpp, a third party that can deal with both of them without them needed to refer to eachother.
+**Commit(s):** "Fixed some * and & problem", "Fixed "diamond problem"", "Added get functionality"
+---
+### Entry 6
+**Date:** 2026-03-08
+**Entry Type:** Bug Fix
+**Task worked on:** insertMultiple
+**Issue or decision:** Red underline and complaining that constructor isn't working.
+**Error message / symptom (if applicable):** "Clangd: In template: no matching constructor for initialization of 'Node<Space *>'", "Clangd: In template: reference to non-static member function must be called; did you mean to call it with no arguments?"
+**What I tried:** The error message gave way to a new one once I added a few things that should be missing, changed [0] to ->at(0) and such.
+**Fix / resolution (or final decision):** Added parenthesis to "data->size()"
+**Commit(s):** "Bugtest and fix insertMultiple"
